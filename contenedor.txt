@@ -1,0 +1,1 @@
+[{"nombre":"producto1","precio":200,"id":1},{"nombre":"producto2","precio":300,"id":2},{"nombre":"producto3","precio":340,"id":3}]
