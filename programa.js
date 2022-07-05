@@ -13,11 +13,11 @@ class Contenedor {
             let objectArray = await this.getAll();
             objeto.id = objectArray.length + 1;
 
-            console.log("guardando objeto con id: " + objeto.id);
+            //console.log("guardando objeto con id: " + objeto.id);
             objectArray.push(objeto);
 
             await fsPr.writeFile(`./${this.fileName}`, JSON.stringify(objectArray))
-            console.log("nuevo archivo: " + JSON.stringify(objectArray));
+            //console.log("nuevo archivo: " + JSON.stringify(objectArray));
             return objeto.id;
         } catch (err) {
             console.log("error => " + err);
@@ -128,7 +128,15 @@ async function getProductoById(numeroRandom) {
     return await contenedor.getById(numeroRandom);
 }
 
+
+async function saveProduct(object){
+    const contenedor = new Contenedor("./contenedor.txt");
+    return await contenedor.save(object);
+}
+
+
 module.exports = {
     getProductos,
-    getProductoById
+    getProductoById,
+    saveProduct
 };
