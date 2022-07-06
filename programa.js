@@ -13,12 +13,29 @@ class Contenedor {
             let objectArray = await this.getAll();
             objeto.id = objectArray.length + 1;
 
-            console.log("guardando objeto con id: " + objeto.id);
+            //console.log("guardando objeto con id: " + objeto.id);
             objectArray.push(objeto);
 
             await fsPr.writeFile(`./${this.fileName}`, JSON.stringify(objectArray))
-            console.log("nuevo archivo: " + JSON.stringify(objectArray));
+            //console.log("nuevo archivo: " + JSON.stringify(objectArray));
             return objeto.id;
+        } catch (err) {
+            console.log("error => " + err);
+        }
+    }
+
+    async update(object, id) {
+        try {
+            let objectArray = await this.getAll();
+
+            const objIndex = objectArray.findIndex((obj => obj.id == id));
+
+            objectArray[objIndex].title = object.title;
+            objectArray[objIndex].price = object.price;
+            objectArray[objIndex].imgUrl = object.imgUrl;
+
+            await fsPr.writeFile(`./${this.fileName}`, JSON.stringify(objectArray))
+            return id;
         } catch (err) {
             console.log("error => " + err);
         }
@@ -115,20 +132,9 @@ async function test() {
 
 }
 
-test()
+//test()
 
-async function getProductos() {
-    const contenedor = new Contenedor("./contenedor.txt");
-    return await contenedor.getAll();
-}
-//const getAll = getProductos();
-
-async function getProductoById(numeroRandom) {
-    const contenedor = new Contenedor("./contenedor.txt");
-    return await contenedor.getById(numeroRandom);
-}
 
 module.exports = {
-    getProductos,
-    getProductoById
+    Contenedor
 };
