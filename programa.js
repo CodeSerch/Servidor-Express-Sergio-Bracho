@@ -24,6 +24,23 @@ class Contenedor {
         }
     }
 
+    async update(object, id) {
+        try {
+            let objectArray = await this.getAll();
+
+            const objIndex = objectArray.findIndex((obj => obj.id == id));
+
+            objectArray[objIndex].title = object.title;
+            objectArray[objIndex].price = object.price;
+            objectArray[objIndex].imgUrl = object.imgUrl;
+
+            await fsPr.writeFile(`./${this.fileName}`, JSON.stringify(objectArray))
+            return id;
+        } catch (err) {
+            console.log("error => " + err);
+        }
+    }
+
     async getById(number) {
         try {
             console.log("Obteniendo objeto con id: " + number);
@@ -115,28 +132,9 @@ async function test() {
 
 }
 
-test()
-
-async function getProductos() {
-    const contenedor = new Contenedor("./contenedor.txt");
-    return await contenedor.getAll();
-}
-//const getAll = getProductos();
-
-async function getProductoById(numeroRandom) {
-    const contenedor = new Contenedor("./contenedor.txt");
-    return await contenedor.getById(numeroRandom);
-}
-
-
-async function saveProduct(object){
-    const contenedor = new Contenedor("./contenedor.txt");
-    return await contenedor.save(object);
-}
+//test()
 
 
 module.exports = {
-    getProductos,
-    getProductoById,
-    saveProduct
+    Contenedor
 };

@@ -1,1 +1,1 @@
-[{"title":"producto18","price":"201","imgUrl":"producto18.png","id":1},{"title":"producto333","price":"325","imgUrl":"producto333.png","id":2}]
+[{"title":"producto18","price":"201","imgUrl":"producto18.png","id":1},{"title":"Producto19","price":"199","imgUrl":"producto19.jpg","id":2}]
