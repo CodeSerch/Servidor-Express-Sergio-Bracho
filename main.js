@@ -1,8 +1,5 @@
 const express = require('express')
 
-//Loads the handlebars module
-const { engine } = require('express-handlebars');
-
 const app = express()
 const PORT = 8080;
 const bodyParser = require('body-parser');
@@ -10,31 +7,33 @@ const bodyParser = require('body-parser');
 const contenedor = require('./programa.js');
 const productContainer = new contenedor.Contenedor('./contenedor.txt')
 
-//Middlewares
-//especificamos el subdirectorio donde se encuentran las páginas estáticas
 app.use(express.static(__dirname + '/public'));
 
 app.use(express.urlencoded({ extended: true }));
 
-// Calling the express.json() method for parsing
 app.use(express.json());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-app.set("views", "./views");
+//ejs
 
-app.get('/', (req, res) => {
-    res.render('home');
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
+// use res.render to load up an ejs view file
+
+// index page
+app.get('/', function(req, res) {
+    res.render('pages/index');
 });
+
 
 app.get('/productos', async (req, res) => {
     let productos = await productContainer.getAll();
     console.log("obteniendo productos...");
     //productos = JSON.stringify(productos);
-    res.render('productos', { layout: 'main', products: productos });
+    res.render('pages/viewer', {layout: 'main', title : JSON.stringify(productos) });
 })
 
 app.get('/productos/:id', async (req, res) => {
