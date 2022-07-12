@@ -16,41 +16,67 @@ div.producto {
   border-radius: 10px;
 }
 
-
 div.form {
-    background-color: #383838;
+  background-color: #383838;
   border: 1px solid rgb(116, 116, 116);
   color: white;
 
-  padding-right: 50px;
-  padding-left: 50px;
+  padding-right: 40px;
+  padding-left: 40px;
   padding-top: 10px;
   padding-bottom: 20px;
 
   margin: 20px;
+
   border-radius: 10px;
 }
 
+input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+input[type="submit"] {
+  background-color: #04aa6d;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+a {
+    background-color: #51aee4;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+}
 /* unvisited link */
 a:link {
-    color: red;
-  }
-  
-  /* visited link */
-  a:visited {
-    color: green;
-  }
-  
-  /* mouse over link */
-  a:hover {
-    color: hotpink;
-  }
-  
-  /* selected link */
-  a:active {
-    color: blue;
-  }
+  color: rgb(69, 54, 207);
+}
 
-  * {
-    font-family: sans-serif;
-  }
+/* visited link */
+a:visited {
+  color: rgb(37, 79, 143);
+}
+
+/* mouse over link */
+a:hover {
+  color: rgb(255, 255, 255);
+}
+
+/* selected link */
+a:active {
+  color: rgb(255, 255, 255);
+}
+
+* {
+  font-family: sans-serif;
+}
