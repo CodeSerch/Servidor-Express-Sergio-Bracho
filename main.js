@@ -1,8 +1,5 @@
 const express = require('express')
 
-//Loads the handlebars module
-const { engine } = require('express-handlebars');
-
 const app = express()
 const PORT = 8080;
 const bodyParser = require('body-parser');
@@ -22,19 +19,23 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-app.set("views", "./views");
+// set the view engine to pug
+app.set('view engine', 'pug');
+// Se indica el directorio donde se almacenarán las plantillas 
+app.set('views', './views');
 
-app.get('/', (req, res) => {
-    res.render('home');
+// use res.render to load up an ejs view file
+
+// index page
+app.get('/', function(req, res) {
+    res.render('index.pug', { message: 'Usando Pug JS en Express' });
 });
 
 app.get('/productos', async (req, res) => {
     let productos = await productContainer.getAll();
     console.log("obteniendo productos...");
     //productos = JSON.stringify(productos);
-    res.render('productos', { layout: 'main', products: productos });
+    res.render('products.pug', { products: JSON.stringify(productos) });
 })
 
 app.get('/productos/:id', async (req, res) => {

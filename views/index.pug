@@ -1,0 +1,17 @@
+html
+  head
+    title= title
+  body
+    h1= message
+    h1= "Agregar un Producto"
+    form(action="/addProducto" method="post")
+        input(type="text", name="title", value="", placeholder="Nombre del Producto")
+        br
+        input(type="text", name="price", value="", placeholder="Precio")
+        br
+        input(type="text", name="imgUrl", value="", placeholder="Img Url")
+        br
+        input(type="submit" value="Submit")
+
+    br
+    a(href="/productos") ir a productos 
