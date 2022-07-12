@@ -1,4 +1,9 @@
 const express = require('express')
+
+//Loads the handlebars module
+const { engine } = require ('express-handlebars');
+
+
 const app = express()
 const PORT = 8080;
 const bodyParser = require('body-parser');
@@ -17,15 +22,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-app.get('/', function (req, res) {
-    res.send('Hello World')
-})
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set("views", "./views");
+
+app.get('/', (req, res) => {
+    res.render('home');
+});
+
+/*app.get("/productos", async (req, res) => {
+    const prods = await productos.getAll();
+    console.log(prods);
+    res.render('view', {layout: 'main', title : JSON.stringify(prods) });
+  })*/
+
+
 
 app.get('/productos', async (req, res) => {
     let productos = await productContainer.getAll();
     console.log("obteniendo productos...");
     //productos = JSON.stringify(productos);
-    res.send(productos);
+    res.render('productos', {layout: 'main', products : productos });
 })
 
 app.get('/productos/:id', async (req, res) => {
@@ -39,7 +56,7 @@ app.post('/addProducto', async (req, res) => {
     //console.log(objetoGuardar)
     let producto = await productContainer.save(objetoGuardar);
     //console.log(producto);
-    res.json(req.body)
+    res.redirect('/productos')
 });
 
 app.put('/putProducto/:id', async (req, res) => {
