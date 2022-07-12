@@ -1,14 +1,20 @@
--vista: home
-<h1>Inicio</h1>
-<h1>Formulario para agregar Productos</h1>
-<form action="/addProducto" method="post">
-    Ingrese el nombre del Producto:
-  <input type="text" name="title" size="10"><br>
-  Ingrese el precio del producto:
-  <input type="text" name="price" size="10"><br>
-  Ingresa la url de la imagen
-  <input type="text" name="imgUrl" size="10"><br>
-    <input type="submit" />
-</form>
-<br/>
-<a href="/productos">ver productos</a>
+<div class="padre"><h2>Vista: home</h2></div>
+
+<div class="padre">
+  <div class="form">
+    <h3>Formulario para agregar Productos</h3>
+    <form action="/addProducto" method="post">
+      Ingrese el nombre del Producto:
+      <input type="text" name="title" size="10" /><br />
+      Ingrese el precio del producto:
+      <input type="text" name="price" size="10" /><br />
+      Ingresa la url de la imagen
+      <input type="text" name="imgUrl" size="10" /><br />
+      <input type="submit" />
+    </form>
+
+    <br />
+    <a href="/productos">ver productos</a>
+  </div>
+
+</div>

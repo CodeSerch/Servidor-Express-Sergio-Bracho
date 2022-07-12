@@ -1,3 +1,56 @@
-body{
-    background-color: aqua;
+body {
+  background-color: rgb(230, 230, 230);
 }
+
+div.padre {
+  display: flex;
+  justify-content: center;
+}
+
+div.producto {
+  background-color: #383838;
+  border: 1px solid rgb(73, 73, 73);
+  color: white;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+
+div.form {
+    background-color: #383838;
+  border: 1px solid rgb(116, 116, 116);
+  color: white;
+
+  padding-right: 50px;
+  padding-left: 50px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+
+  margin: 20px;
+  border-radius: 10px;
+}
+
+/* unvisited link */
+a:link {
+    color: red;
+  }
+  
+  /* visited link */
+  a:visited {
+    color: green;
+  }
+  
+  /* mouse over link */
+  a:hover {
+    color: hotpink;
+  }
+  
+  /* selected link */
+  a:active {
+    color: blue;
+  }
+
+  * {
+    font-family: sans-serif;
+  }

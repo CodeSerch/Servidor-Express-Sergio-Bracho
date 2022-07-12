@@ -1,18 +1,15 @@
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>vista</title>
-  </head>
-  <body>
-    -vista: handlebars
-    {{{body}}}
-    {{#each products}}
+<div class="padre"><h2>Vista: Productos</h2></div>
+{{{body}}}
+<div class="padre">
+  {{#each products}}
+    <div class="producto">
       <p>Titulo: {{title}}</p>
       <p>Precio: {{price}}</p>
       <p>ImgUrl: {{imgUrl}}</p>
-      <br/>
-    {{/each}}
-
-    <a href="/">volver al inicio</a>
-  </body>
-</html>
+      <br />
+    </div>
+  {{/each}}
+</div>
+<div class="padre">
+<a href="/">volver al inicio</a>
+</div>
