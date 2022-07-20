@@ -1,11 +1,18 @@
 const express = require('express')
+
+//Loads the handlebars module
+const { engine } = require('express-handlebars');
+
 const app = express()
 const PORT = 8080;
 const bodyParser = require('body-parser');
 
-
 const contenedor = require('./programa.js');
 const productContainer = new contenedor.Contenedor('./contenedor.txt')
+
+//Middlewares
+//especificamos el subdirectorio donde se encuentran las páginas estáticas
+app.use(express.static(__dirname + '/public'));
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -15,17 +22,19 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set("views", "./views");
 
-
-app.get('/', function (req, res) {
-    res.send('Hello World')
-})
+app.get('/', (req, res) => {
+    res.render('home');
+});
 
 app.get('/productos', async (req, res) => {
     let productos = await productContainer.getAll();
     console.log("obteniendo productos...");
     //productos = JSON.stringify(productos);
-    res.send(productos);
+    res.render('productos', { layout: 'main', products: productos });
 })
 
 app.get('/productos/:id', async (req, res) => {
@@ -39,15 +48,15 @@ app.post('/addProducto', async (req, res) => {
     //console.log(objetoGuardar)
     let producto = await productContainer.save(objetoGuardar);
     //console.log(producto);
-    res.json(req.body)
+    res.redirect('/productos')
 });
 
 app.put('/putProducto/:id', async (req, res) => {
     let id = parseInt(req.params.id);
-    const objetoGuardar = { title: req.body.title, price: req.body.price, imgUrl: req.body.imgUrl};
+    const objetoGuardar = { title: req.body.title, price: req.body.price, imgUrl: req.body.imgUrl };
     console.log(objetoGuardar)
 
-    let producto = await productContainer.update(objetoGuardar,id)
+    let producto = await productContainer.update(objetoGuardar, id)
 
     console.log(producto);
     res.json(req.body)
