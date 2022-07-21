@@ -60,6 +60,7 @@ class Contenedor {
         try {
             if (fs.existsSync(`./${this.fileName}`)) {
                 let content = await fsPr.readFile(`./${this.fileName}`, 'utf-8')
+                console.log("productos obtenidos con exito")
                 return JSON.parse(content);
             } else {
                 console.log("retornado nuevo Array")
