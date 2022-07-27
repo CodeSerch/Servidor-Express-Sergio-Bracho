@@ -1,0 +1,24 @@
+
+   
+
+    <div class="padre"><h2>   -vista: Vista Dinamica de Productos</h2></div>
+{{{body}}}
+<div class="padre">
+  {{#each products}}
+    <div class="producto">
+      <p>Titulo: {{title}}</p>
+      <p>Precio: {{price}}</p>
+      <p>ImgUrl: {{imgUrl}}</p>
+      <br />
+    </div>
+  {{/each}}
+</div>
+<div class="padre">
+<a href="/">volver al inicio</a>
+</div>
+
+ <div id="lista"> productos</div>
+    <button id="btn">refresh</button>
+
+<script src="../socket.io/socket.io.js"></script>
+    <script src="/javascript/vivo.js"></script>
