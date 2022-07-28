@@ -1,6 +1,8 @@
+const { timeStamp, debug } = require('console');
 let fs = require('fs');
 let fsPr = fs.promises;
 const { stringify } = require('querystring');
+
 
 class Contenedor {
 
@@ -95,7 +97,101 @@ class Contenedor {
     }
 }
 
-let contenedor = new Contenedor("contenedor.txt");
+class Carrito {
+    constructor(id, timeStamp) {
+        this.productos = new Array;
+        this.id = id;
+        this.timeStamp = timeStamp;
+    }
+
+    getAll() {
+        return this.productos;
+    }
+
+    deleteAll() {
+        try {
+            this.productos = new Array;
+        } catch (err) {
+            console.error(err)
+        }
+    }
+}
+
+class ContenedorCarritos {
+    constructor() {
+        this.arrayDeCarritos = new Array;
+        console.log("iniciando constructor");
+    }
+
+    getById(number) {
+        try {
+            console.log("Obteniendo carrito con id: " + number);
+            let carrito = this.arrayDeCarritos.find(x => x.id === number);
+            return carrito;
+        } catch (error) {
+            console.log("no se encontro el carrito con id: " + number + " error => " + err);
+        }
+
+    }
+
+    deleteById(number) {
+        try {
+            let content = this.arrayDeCarritos;
+
+            content = content.filter(x => x.id !== number);
+
+            this.arrayDeCarritos = content;
+            return (number + " eliminado")
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    crearCarrito() {
+        try {
+            console.log(" array de carritos => " + this.arrayDeCarritos);
+            if (this.arrayDeCarritos.length < 1) {
+                console.log("array de carritos no existe, iniciando uno...");
+                let id = 1;
+                let timeStampCarrito = Date.now();
+                let carrito = new Carrito(id, timeStampCarrito);
+                this.arrayDeCarritos.push(carrito);
+                return id;
+            } else {
+                let id = this.arrayDeCarritos.length + 1;
+                let timeStampCarrito = Date.now();
+                let carrito = new Carrito(id, timeStampCarrito);
+                this.arrayDeCarritos.push(carrito);
+                return id;
+            }
+        } catch (err) {
+            console.log("no se pudo crear el carrito, error => " + err);
+        }
+    }
+
+    
+    putProduct(objeto, idCarrito) {
+        this.arrayDeCarritos[idCarrito-1].productos.push(objeto);
+    }
+
+    deleteProductById(idCarrito, idProducto) {
+        try {
+            let carrito = this.arrayDeCarritos[idCarrito-1];
+            console.log("carrito: " + JSON.stringify(carrito) + " eliminadloel item numero " + idProducto + " del carrito...")
+            carrito = carrito.productos.filter(x => x.id !== idProducto);
+            this.arrayDeCarritos[idCarrito-1] = carrito;
+            return (number + " eliminado")
+        }
+        catch (err) {
+            console.log("error" + err);
+        }
+    }
+    
+}
+
+//PRUEBAS
+/*let contenedor = new Contenedor("contenedor.txt");
 console.log("nombre de la ruta del archivo: " + stringify(contenedor));
 
 const p1 = {
@@ -109,8 +205,7 @@ const p2 = {
 const p3 = {
     nombre: 'producto3',
     precio: 340,
-}
-
+}*/
 
 
 async function test() {
@@ -137,5 +232,7 @@ async function test() {
 
 
 module.exports = {
-    Contenedor
+    Contenedor,
+    Carrito,
+    ContenedorCarritos
 };
