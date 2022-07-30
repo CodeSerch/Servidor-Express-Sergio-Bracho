@@ -151,7 +151,6 @@ app.get('/carrito/:id', (req, res) => {
   let id = parseInt(req.params.id);
   console.log("obteniendo productos...");
   let productos = carritoContainer.getById(id);
-  console.log("carrito: " + productos);
   res.json(productos);
 });
 

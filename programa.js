@@ -127,6 +127,7 @@ class ContenedorCarritos {
         try {
             console.log("Obteniendo carrito con id: " + number);
             let carrito = this.arrayDeCarritos.find(x => x.id === number);
+            console.table(carrito.productos);
             return carrito;
         } catch (error) {
             console.log("no se encontro el carrito con id: " + number + " error => " + err);
@@ -177,11 +178,25 @@ class ContenedorCarritos {
 
     deleteProductById(idCarrito, idProducto) {
         try {
-            let carrito = this.arrayDeCarritos[idCarrito-1];
-            console.log("carrito: " + JSON.stringify(carrito) + " eliminadloel item numero " + idProducto + " del carrito...")
-            carrito = carrito.productos.filter(x => x.id !== idProducto);
-            this.arrayDeCarritos[idCarrito-1] = carrito;
-            return (number + " eliminado")
+            //let carrito = this.arrayDeCarritos[idCarrito-1];
+            console.log("carrito antes de eliminar");
+            console.table(this.arrayDeCarritos[idCarrito-1].productos);
+            //console.log("carrito: " + JSON.stringify(carrito) + " eliminado el item numero " + idProducto + " del carrito...")
+            //carrito = carrito.productos.filter(x => x.id !== idProducto);
+
+            try {
+                let content = this.arrayDeCarritos[idCarrito-1].productos;
+                content = content.filter(x => x.id !== idProducto);
+                this.arrayDeCarritos[idCarrito-1].productos = content;
+            }
+            catch (err) {
+                console.log(err);
+            }
+
+            console.log("carrito despues de eliminar");
+            console.table(this.arrayDeCarritos[idCarrito-1].productos);
+            
+            return ("Carrito id: " + idCarrito + " producto id: " + idProducto + " eliminado");
         }
         catch (err) {
             console.log("error" + err);
