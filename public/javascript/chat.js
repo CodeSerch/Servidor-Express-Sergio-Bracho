@@ -1,5 +1,5 @@
 
-let email = prompt("ingresa tu email:");
+let usuario = prompt("ingresa tu usuario:");
 let socket = io();
 
 let messages = document.getElementById('messages');
@@ -16,14 +16,14 @@ form.addEventListener('submit', function (e) {
 
   e.preventDefault();
   if (input.value) {
-    socket.emit('chat message', dateTime + " " + email + ": " + input.value);
+    socket.emit('chat message', {"fecha": dateTime, "usuario":usuario,"mensaje":input.value});
     input.value = '';
   }
 });
 
 socket.on('chat message', function (msg) {
   let item = document.createElement('li');
-  item.textContent = msg;
+  item.textContent = (msg.fecha + " " + msg.usuario + " " + msg.mensaje);
   messages.appendChild(item);
   window.scrollTo(0, document.body.scrollHeight);
 });
@@ -40,13 +40,12 @@ socket.on('chat init', function (chatStorage) {
 
 
   console.log("chat storage length: " + chatStorage.length);
-  console.log(chatStorage);
   console.log("entrando al ciclo for");
   for (i = 0; i <= chatStorage.length - 1; i++) {
     console.log("index: " + i)
     console.log(chatStorage[i]);
     let item = document.createElement('li');
-    item.textContent = chatStorage[i];
+    item.textContent = (chatStorage[i].fecha + " " + chatStorage[i].usuario + " " + chatStorage[i].mensaje);
     messages.appendChild(item);
   }
   window.scrollTo(0, document.body.scrollHeight);

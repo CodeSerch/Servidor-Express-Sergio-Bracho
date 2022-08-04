@@ -196,3 +196,7 @@ server.listen(process.env.PORT || PORT, function (err) {
   if (err) console.log(err);
   console.log('Server started at http://localhost:' + PORT);
 });
+
+module.exports = {
+  sql
+};
