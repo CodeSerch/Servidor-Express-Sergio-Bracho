@@ -1,6 +1,25 @@
 const express = require('express');
 const app = express();
 
+const { ClienteSql }  = require('./sql.js');
+const { options } = require('./options/SQLite3.js');
+
+const sql = new ClienteSql(options);
+
+//MYSQL
+
+async function asynCall(){
+  try {
+    console.log("trye");
+    let articulo = {nombre:'Pollo'}
+    await sql.insertarArticulos(articulo);
+  } catch (error) {
+    console.log("error =>")
+  }
+}
+
+asynCall()
+
 //socket io 
 const http = require('http');
 const server = http.createServer(app);
@@ -177,3 +196,7 @@ server.listen(process.env.PORT || PORT, function (err) {
   if (err) console.log(err);
   console.log('Server started at http://localhost:' + PORT);
 });
+
+module.exports = {
+  sql
+};
