@@ -22,6 +22,17 @@ class ClienteSql {
   }
 }
 
+class ClienteMDB{
+    constructor(config) {
+    this.knex = knexLib(config);
+    }
+
+    getMensajes(){
+      return this.knex('articulos').select('*'); 
+    }
+}
+
 module.exports = {
-    ClienteSql
+    ClienteSql,
+    ClienteMDB
 };

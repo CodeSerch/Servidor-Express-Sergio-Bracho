@@ -1,10 +1,23 @@
+//Archivo de seguridad con la data de la url de mi base de datos MongoDB
+require('dotenv').config()
+
 const express = require('express');
 const app = express();
 
-const { ClienteSql }  = require('./sql.js');
+/*----------------Config de MongoDB------------------------*/
+require('./daos/MongoDB/config');
+const productModel = require('./daos/MongoDB/models')
+/*---------------------------------------------------------*/
+
+
+/*----------------Config de MYSql--------------------------*/
+const { ClienteSql, ClienteMDB }  = require('./sql.js');
 const { options } = require('./options/SQLite3.js');
 
 const sql = new ClienteSql(options);
+/*---------------------------------------------------------*/
+
+//const { MDBoptions } = require('./options/MariaDB');
 
 //MYSQL
 
@@ -37,6 +50,8 @@ const PORT = 8080;
 const bodyParser = require('body-parser');
 
 const contenedor = require('./programa.js');
+const { title } = require('process');
+const { table } = require('console');
 const productContainer = new contenedor.Contenedor('./contenedor.txt');
 const carritoContainer = new contenedor.ContenedorCarritos;
 
@@ -84,7 +99,7 @@ io.on('connection', (socket) => {
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
-app.set("views", "./views");
+app.set("views", "./views"); 
 
 app.get('/', (req, res) => {
   res.render('home', { navbar: 'navbar' });
@@ -190,6 +205,15 @@ app.delete('/carrito/:id/productos/:id_prod', async (req, res) => {
   //Eliminar un producto del carrito por su id de carrito y de producto
   res.json(carritoContainer.deleteProductById(id,id_prod));
 });
+
+//ROUTES WITH MONGODB
+app.get("/getMongoData", async (req, res) => {
+  //Get Data MONGODB
+  const productsMDB = await productModel.find({});
+  //Table me muestra cosas raras, revisar
+  //console.table(productsMDB);
+  res.json(productsMDB);
+})
 
 //Start the server
 server.listen(process.env.PORT || PORT, function (err) {
