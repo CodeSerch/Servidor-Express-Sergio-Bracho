@@ -70,7 +70,7 @@ const bodyParser = require('body-parser');
 
 const contenedor = require('./programa.js');
 const { title } = require('process');
-const { table } = require('console');
+const { table, debug } = require('console');
 const productContainer = new contenedor.Contenedor('./contenedor.txt');
 const carritoContainer = new contenedor.ContenedorCarritos;
 
@@ -117,6 +117,12 @@ io.on('connection', (socket) => {
   socket.on('get user', async (alias) => {
     let usuario = await Users.find({alias: alias});
     io.sockets.emit('send user', usuario);
+  })
+
+  socket.on('delete chat history', async () => {
+    console.log("empty chat storage...")
+    await ChatStorage.remove({});
+    //io.sockets.emit('send user', usuario);
   })
 
 });

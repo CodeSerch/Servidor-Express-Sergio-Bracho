@@ -13,10 +13,8 @@ class ChatTxt {
     this.ruta = ruta;
   }
   async getAll() {
-    console.log("entrando a getAll");
     try {
       const historialMensajes = await ChatStorage.find({});
-      console.log(historialMensajes);
       //const historialMensajes = await fs.promises.readFile(this.ruta, "utf-8");
       return historialMensajes;
     } catch (error) {

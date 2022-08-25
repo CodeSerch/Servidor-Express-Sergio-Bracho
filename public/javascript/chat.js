@@ -1,9 +1,14 @@
-
+let socket = io();
 
 let usuario = "";
 let avatarImg = "";
 
-let socket = io();
+socket.emit("get user", "Serch28");
+
+socket.on("send user", function (userData){
+    usuario = userData[0].alias;
+    avatarImg = userData[0].avatar;
+})
 
 let messages = document.getElementById("messages");
 let form = document.getElementById("form");

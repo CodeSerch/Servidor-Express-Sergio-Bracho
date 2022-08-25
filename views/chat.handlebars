@@ -1,9 +1,11 @@
 -vista: chat
     </br>
     <a href="/">volver al inicio</a>
+    <a href="/chat" id="buttonClearHistory">limpiar historial del chat</a>
     </br>
     <ul id="messages">mensajes</ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
+    <script src="../socket.io/socket.io.js"></script>
     <script src="/javascript/chat.js"></script>
