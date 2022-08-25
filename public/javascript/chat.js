@@ -1,53 +1,108 @@
 
-let usuario = prompt("ingresa tu usuario:");
+
+let usuario = "";
+let avatarImg = "";
+
 let socket = io();
 
-let messages = document.getElementById('messages');
-let form = document.getElementById('form');
-let input = document.getElementById('input');
+let messages = document.getElementById("messages");
+let form = document.getElementById("form");
+let input = document.getElementById("input");
 
-socket.emit("chat init", "chat init")
+socket.emit("chat init", "chat init");
 
-form.addEventListener('submit', function (e) {
+form.addEventListener("submit", function (e) {
   let today = new Date();
-  let date = today.getFullYear() + '-' + today.getDate() + '-' + (today.getMonth() + 1);
-  let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  let dateTime = date + ' ' + time;
+  let date =
+    today.getFullYear() + "-" + today.getDate() + "-" + (today.getMonth() + 1);
+  let time =
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  let dateTime = date + " " + time;
 
   e.preventDefault();
   if (input.value) {
-    socket.emit('chat message', {"fecha": dateTime, "usuario":usuario,"mensaje":input.value});
-    input.value = '';
+    socket.emit("chat message", {
+      fecha: dateTime,
+      usuario: {
+        alias: usuario,
+        avatar: avatarImg,
+      },
+      texto: input.value,
+    });
+    input.value = "";
   }
 });
 
-socket.on('chat message', function (msg) {
-  let item = document.createElement('li');
-  item.textContent = (msg.fecha + " " + msg.usuario + " " + msg.mensaje);
-  messages.appendChild(item);
+socket.on("chat message", function (msg) {
+  let chatBox = document.createElement("div");
+
+  chatBox.classList.add("chatBox");
+
+  let dateText = document.createElement("p");
+  dateText.classList.add("dateTextStyle");
+  dateText.textContent = msg.fecha;
+
+  let username = document.createElement("p");
+  username.classList.add("usernameStyle");
+  username.textContent = msg.usuario.alias + ":";
+
+  let chatText = document.createElement("p");
+  chatText.classList.add("chatTextStyle");
+  chatText.textContent = msg.texto;
+
+  let avatarImg = document.createElement("img");
+  avatarImg.src = msg.usuario.avatar;
+  avatarImg.width = 50;
+  avatarImg.height = 50;
+
+  chatBox.appendChild(dateText);
+  chatBox.appendChild(avatarImg);
+  chatBox.appendChild(username);
+  chatBox.appendChild(chatText);
+
+  messages.appendChild(chatBox);
   window.scrollTo(0, document.body.scrollHeight);
 });
 
-
-socket.on('chat init', function (chatStorage) {
-  let item = document.createElement('li');
+socket.on("chat init", function (chatStorage) {
+  let historyItem = document.createElement("h2");
   if (chatStorage.length == 0) {
-    item.textContent = "historial: vacio";
+    historyItem.textContent = "historial vacio";
   } else {
-    item.textContent = "historial:";
+    historyItem.textContent = "historial";
   }
-  messages.appendChild(item);
-
+  messages.appendChild(historyItem);
 
   console.log("chat storage length: " + chatStorage.length);
   console.log("entrando al ciclo for");
   for (i = 0; i <= chatStorage.length - 1; i++) {
-    console.log("index: " + i)
-    console.log(chatStorage[i]);
-    let item = document.createElement('li');
-    item.textContent = (chatStorage[i].fecha + " " + chatStorage[i].usuario + " " + chatStorage[i].mensaje);
-    messages.appendChild(item);
+    let chatBox = document.createElement("div");
+    chatBox.classList.add("chatBox");
+
+    let dateText = document.createElement("p");
+    dateText.classList.add("dateTextStyle");
+    dateText.textContent = chatStorage[i].fecha;
+
+    let username = document.createElement("p");
+    username.classList.add("usernameStyle");
+    username.textContent = chatStorage[i].usuario.alias + ":";
+
+    let chatText = document.createElement("p");
+    chatText.classList.add("chatTextStyle");
+    chatText.textContent = chatStorage[i].texto;
+
+    let avatarImg = document.createElement("img");
+    avatarImg.src = chatStorage[i].usuario.avatar;
+    avatarImg.width = 50;
+    avatarImg.height = 50;
+
+    chatBox.appendChild(dateText);
+    chatBox.appendChild(avatarImg);
+    chatBox.appendChild(username);
+    chatBox.appendChild(chatText);
+
+    messages.appendChild(chatBox);
+    window.scrollTo(0, document.body.scrollHeight);
   }
   window.scrollTo(0, document.body.scrollHeight);
 });
-

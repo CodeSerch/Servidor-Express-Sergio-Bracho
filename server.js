@@ -5,8 +5,11 @@ const express = require('express');
 const app = express();
 
 /*----------------Config de MongoDB------------------------*/
+const { model } = require("mongoose");
 require('./daos/MongoDB/config');
-const productModel = require('./daos/MongoDB/models')
+
+var { Productos, ChatStorage, Users } = require('./daos/MongoDB/models');
+
 /*---------------------------------------------------------*/
 
 
@@ -40,7 +43,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 ///////
 const chatJs = require('./public/javascript/chatTxt');
-const chatStorage = new chatJs.ChatTxt('./chatTxt.txt')
+const chatStorageFs = new chatJs.ChatTxt('./chatTxt.txt')
 
 //Loads the handlebars module
 const { engine } = require('express-handlebars');
@@ -77,7 +80,7 @@ io.on('connection', (socket) => {
   console.log('new connection', socket.id);
 
   socket.on('chat init', async (mensaje) => {
-    const chatInit = await chatStorage.getAll();
+    const chatInit = await chatStorageFs.getAll();
     io.emit('chat init', chatInit);
     console.log("este es el mensaje de " + mensaje)
   })
@@ -85,7 +88,7 @@ io.on('connection', (socket) => {
   socket.on('chat message', async (msg) => {
     io.emit('chat message', msg);
     console.log('message: ' + msg);
-    const ChatPromise = await chatStorage.save(msg);
+    const ChatPromise = await chatStorageFs.save(msg);
     console.log("chat promise: " + ChatPromise);
   })
 
@@ -209,10 +212,13 @@ app.delete('/carrito/:id/productos/:id_prod', async (req, res) => {
 //ROUTES WITH MONGODB
 app.get("/getMongoData", async (req, res) => {
   //Get Data MONGODB
-  const productsMDB = await productModel.find({});
+  //const productsMDB = await productModel.find({})
+  const productos = await Productos.find({});
+  const chats = await ChatStorage.find({});
+  //console.log(productos);
   //Table me muestra cosas raras, revisar
-  //console.table(productsMDB);
-  res.json(productsMDB);
+  //console.table(productos);
+  res.json(chats);
 })
 
 //Start the server

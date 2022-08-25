@@ -80,3 +80,33 @@ a:active {
 * {
   font-family: sans-serif;
 }
+
+div.chatBox {
+  display: flex;
+  background-color: #38383832;
+  flex-direction: row;
+  font-family: sans-serif;
+}
+
+p.usernameStyle {
+  font-family: sans-serif;
+  font-weight: bolder;
+  color: #0f2edd;
+  padding-left: 10px;
+}
+
+p.chatTextStyle {
+  font-family: sans-serif;
+  font-weight: bold;
+  color: #686d8a;
+  padding-left: 10px;
+}
+
+p.dateTextStyle {
+  font-size: small;
+  font-family: sans-serif;
+  color: #494c5c;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
