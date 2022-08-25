@@ -12,6 +12,22 @@ var { Productos, ChatStorage, Users } = require('./daos/MongoDB/models');
 
 /*---------------------------------------------------------*/
 
+//Crear Usuario en la base de Datos
+async function createUser() {
+  console.log("creating username...");
+  await Users.create({
+      correo: "sergioenriquebg28@gmail.com",
+      nombre: "Sergio",
+      apellido: "Bracho",
+      edad: 21,
+      alias: "Serch28",
+      avatar: "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+  });
+}
+
+//createUser();
+
+
 
 /*----------------Config de MYSql--------------------------*/
 const { ClienteSql, ClienteMDB }  = require('./sql.js');
@@ -97,6 +113,12 @@ io.on('connection', (socket) => {
     let productos = await productContainer.getAll();
     io.sockets.emit('send product', productos);
   })
+
+  socket.on('get user', async (alias) => {
+    let usuario = await Users.find({alias: alias});
+    io.sockets.emit('send user', usuario);
+  })
+
 });
 
 

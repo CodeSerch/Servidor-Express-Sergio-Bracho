@@ -1,16 +1,11 @@
 //const fs = require('fs');
-
-const { ClienteSql } = require("../../sql.js");
+/*const { ClienteSql } = require("../../sql.js");
 const { options } = require("../../options/SQLite3.js");
-
-const sql = new ClienteSql(options);
+const sql = new ClienteSql(options);*/
 
 /*----------------Config de MongoDB------------------------*/
-const { model } = require("mongoose");
 require("../../daos/MongoDB/config");
-
-var { Productos, ChatStorage, Users } = require("../../daos/MongoDB/models");
-
+var { ChatStorage} = require("../../daos/MongoDB/models");
 /*---------------------------------------------------------*/
 
 class ChatTxt {
