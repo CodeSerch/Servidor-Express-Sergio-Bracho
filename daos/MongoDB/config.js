@@ -4,6 +4,13 @@ const mongoose = require('mongoose');
 //Set up default mongoose connection
 const mongoDB = process.env.MONGODB_URI;
 
+
+//Vencimiento del token
+process.env.CADUCIDAD_TOKEN = '48h';
+
+//SEED de autenticacion
+process.env.SEED_AUTENTICACION = process.env.SEED_AUTENTICACION || 'este-es-el-seed-desarrollo';
+
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(db => console.log("MongoDB is connected"))
 .catch(err => console.log(err));
