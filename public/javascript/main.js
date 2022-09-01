@@ -3,7 +3,7 @@ console.log("hola desde main.js");
 let mainSocket = io();
 let user;
 
-mainSocket.emit("get user", "Serch28");
+mainSocket.emit("get user", "");
 
 mainSocket.on("send user", function (userData) {
   user = userData;

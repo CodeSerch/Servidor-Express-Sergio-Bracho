@@ -3,6 +3,9 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
+let sessions = require("express-session");
+let cookieParser = require('cookie-parser')
+//let cookies = require('cookies')
 
 /*----------------Config de MongoDB------------------------*/
 const { model } = require("mongoose");
@@ -33,7 +36,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 var uniqueValidator = require("mongoose-unique-validator");
-
 
 /*----------------Config de MYSql--------------------------*/
 const { ClienteSql, ClienteMDB } = require("./sql.js");
@@ -76,6 +78,7 @@ const bodyParser = require("body-parser");
 const contenedor = require("./programa.js");
 const { title } = require("process");
 const { table, debug } = require("console");
+const { session } = require("passport");
 const productContainer = new contenedor.Contenedor("./contenedor.txt");
 const carritoContainer = new contenedor.ContenedorCarritos();
 
@@ -84,6 +87,7 @@ let bool,
 
 //Middlewares
 //especificamos el subdirectorio donde se encuentran las páginas estáticas
+
 app.use(express.static(__dirname + "/public"));
 
 app.use(express.urlencoded({ extended: true }));
@@ -95,6 +99,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
+
+app.use(cookieParser())
+
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(
+  sessions({
+    secret: "asdasds",
+    saveUninitialized: true,
+    cookie: { maxAge: oneDay },
+    resave: false,
+  })
+);
 
 io.on("connection", (socket) => {
   console.log("new connection", socket.id);
@@ -130,12 +146,68 @@ io.on("connection", (socket) => {
   });
 });
 
+const verifyToken = (req, res, next) => {
+  const token = req.header("auth-token");
+  if (!token) return res.status(401).json({ error: "Acceso denegado" });
+  try {
+    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+    req.user = verified;
+    next(); // continuamos
+  } catch (error) {
+    res.status(400).json({ error: "token no es válido" });
+  }
+};
+
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
 
 app.get("/", (req, res) => {
-  res.render("home", { navbar: "navbar" });
+  let userData;
+  let token = null;
+  try {
+    console.log(req.cookies.auth)
+    token = req.cookies.auth;
+    console.log("sucess get cookie auth")
+  } catch (error) {
+    console.log("cookies doesn't exist");
+  }
+
+  //let session = req.session;
+
+  //console.log(session);
+
+  //let token = window.localStorage.getItem("access-token");
+  
+
+  if (token) {
+    jwt.verify(
+      token,
+      process.env.SEED_AUTENTICACION,
+      function (err, token_data) {
+        if (err) {
+          return res.status(403).send("Error");
+        } else {
+          req.user_data = token_data;
+          console.log(token_data);
+          userData = token_data.usuario;
+        }
+      }
+    );
+  } else {
+    console.log("no token");
+    //return res.status(403).send('No token');
+  }
+
+  //let userData = req.user;
+
+  //console.log(userData);
+
+  //if (token) {
+    res.render("home", { navbar: "navbaar", userData: userData.alias });
+  //} else {
+  //  res.render("home", { navbar: "navbar" });
+  //}
 });
 
 app.get("/login", (req, res) => {
@@ -183,16 +255,32 @@ app.post("/login", (req, res) => {
         expiresIn: process.env.CADUCIDAD_TOKEN,
       }
     );
-    res.json({
+
+    //window.localStorage.setItem("access_token", token);
+
+    //usuarioDB.token = token;
+
+    /*res.header("auth-token", token).json({
+      error: null,
+      data: { token },
+    });*/
+
+    res.cookie("auth", token);
+
+    res.redirect("/");
+    /*res.json({
       ok: true,
       usuario: usuarioDB,
       token,
-    });
+    });*/
+    //RESPUESTA
   });
 });
 
-app.post('/register', function (req, res) {  let body = req.body;
-  let { correo, nombre, apellido, edad, alias, avatar, password, role } = body;  let usuario = new Users({
+app.post("/register", function (req, res) {
+  let body = req.body;
+  let { correo, nombre, apellido, edad, alias, avatar, password, role } = body;
+  let usuario = new Users({
     correo,
     nombre,
     apellido,
@@ -200,17 +288,21 @@ app.post('/register', function (req, res) {  let body = req.body;
     alias,
     avatar,
     password: bcrypt.hashSync(password, 10),
-    role
-  });usuario.save((err, usuarioDB) => {    if (err) {
+    role,
+  });
+
+  usuario.save((err, usuarioDB) => {
+    if (err) {
       return res.status(400).json({
-         ok: false,
-         err,
+        ok: false,
+        err,
       });
-    }    res.json({
-          ok: true,
-          usuario: usuarioDB
-       });
-    })
+    }
+    res.json({
+      ok: true,
+      usuario: usuarioDB,
+    });
+  });
 });
 
 /*app.get('/register', (req, res) => {
