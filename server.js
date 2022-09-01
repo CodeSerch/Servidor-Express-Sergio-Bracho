@@ -203,11 +203,11 @@ app.get("/", (req, res) => {
 
   //console.log(userData);
 
-  //if (token) {
+  if (token) {
     res.render("home", { navbar: "navbaar", userData: userData.alias });
-  //} else {
-  //  res.render("home", { navbar: "navbar" });
-  //}
+  } else {
+    res.render("home", { navbar: "navbar" });
+  }
 });
 
 app.get("/login", (req, res) => {
@@ -275,6 +275,12 @@ app.post("/login", (req, res) => {
     });*/
     //RESPUESTA
   });
+});
+
+app.get("/logout", (req, res) => {
+  //res.cookie("auth", token);
+  res.clearCookie("auth");
+  res.redirect("/");
 });
 
 app.post("/register", function (req, res) {
