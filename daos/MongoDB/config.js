@@ -13,7 +13,7 @@ process.env.SEED_AUTENTICACION = process.env.SEED_AUTENTICACION || 'este-es-el-s
 
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(db => console.log("MongoDB is connected"))
-.catch(err => console.log(err));
+.catch(err => console.log("database connect error"));
 
 //Get the default connection
 function getConnection(){

@@ -7,6 +7,15 @@ let sessions = require("express-session");
 let cookieParser = require('cookie-parser')
 //let cookies = require('cookies')
 
+let systemInfo={
+  "SistemaOperativo": process.platform,
+  "VersionNode.js":process.version,
+  "MemoriaTotalReservada":process.memoryUsage.rss,
+  "PathDeEjecucion":process.execPath,
+  "ProcessId":process.pid,
+  "CarpetaDelProyecto":process.cwd
+};
+
 /*----------------Config de MongoDB------------------------*/
 const { model } = require("mongoose");
 require("./daos/MongoDB/config");
@@ -265,7 +274,7 @@ app.post("/login", (req, res) => {
       data: { token },
     });*/
 
-    res.cookie("auth", token);
+    res.cookie("auth", token, {maxAge: 10 * 60 * 60});
 
     res.redirect("/");
     /*res.json({
@@ -309,6 +318,10 @@ app.post("/register", function (req, res) {
       usuario: usuarioDB,
     });
   });
+});
+
+app.get("/info", (req, res) => {
+  res.render("info", { layout: "main", info: systemInfo });
 });
 
 /*app.get('/register', (req, res) => {
@@ -384,6 +397,7 @@ app.get("/productoRandom", async (req, res) => {
   let producto = await productContainer.getProductoById(numeroRandom);
   res.send(producto);
 });
+
 
 app.delete("/deleteProducto/:id", async (req, res) => {
   let id = parseInt(req.params.id);
