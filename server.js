@@ -9,7 +9,7 @@ let cookieParser = require('cookie-parser')
 
 let systemInfo={
   "SistemaOperativo": process.platform,
-  "VersionNode.js":process.version,
+  "VersionNode":process.version,
   "MemoriaTotalReservada":process.memoryUsage.rss,
   "PathDeEjecucion":process.execPath,
   "ProcessId":process.pid,
