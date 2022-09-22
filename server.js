@@ -1,3 +1,5 @@
+// ./node_modules/.bin/pm2 list  
+
 //Archivo de seguridad con la data de la url de mi base de datos MongoDB
 require("dotenv").config();
 
@@ -25,8 +27,9 @@ function masterProcess() {
     cluster.fork();
   }
 
-  cluster.on("exit", (worker, code, signal) => {
-    console.log(`worker ${worker.process.pid} died`);
+  cluster.on("exit", function (worker, code, signal) {
+    console.log("Se ha muerto el worker %s, reiniciando", worker.process.pid);
+    cluster.fork();
   });
 
   //process.exit();
