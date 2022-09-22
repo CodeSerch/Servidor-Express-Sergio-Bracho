@@ -4,16 +4,47 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 let sessions = require("express-session");
-let cookieParser = require('cookie-parser')
+let cookieParser = require("cookie-parser");
 //let cookies = require('cookies')
 
-let systemInfo={
-  "SistemaOperativo": process.platform,
-  "VersionNode":process.version,
-  "MemoriaTotalReservada":process.memoryUsage.rss,
-  "PathDeEjecucion":process.execPath,
-  "ProcessId":process.pid,
-  "CarpetaDelProyecto":process.cwd
+const cluster = require("cluster");
+const numCPUs = require("os").cpus().length;
+
+console.log("numero de Cpus => " + numCPUs);
+console.log("PID MASTER => " + process.pid);
+
+/*for (let i = 0; i < numCPUs; i++) {
+  cluster.fork();
+}*/
+
+function masterProcess() {
+  console.log(`Master ${process.pid} is running`);
+
+  for (let i = 0; i < numCPUs; i++) {
+    console.log(`Forking process number ${i}...`);
+    cluster.fork();
+  }
+
+  cluster.on("exit", (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`);
+  });
+
+  //process.exit();
+}
+
+function childProcess() {
+  console.log(`Worker ${process.pid} started and finished`);
+
+  //process.exit();
+}
+
+let systemInfo = {
+  SistemaOperativo: process.platform,
+  VersionNode: process.version,
+  MemoriaTotalReservada: process.memoryUsage.rss,
+  PathDeEjecucion: process.execPath,
+  ProcessId: process.pid,
+  CarpetaDelProyecto: process.cwd,
 };
 
 /*----------------Config de MongoDB------------------------*/
@@ -72,6 +103,7 @@ asynCall();
 //socket io
 const http = require("http");
 const server = http.createServer(app);
+
 const { Server } = require("socket.io");
 const io = new Server(server);
 ///////
@@ -109,7 +141,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
-app.use(cookieParser())
+app.use(cookieParser());
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(
@@ -175,9 +207,9 @@ app.get("/", (req, res) => {
   let userData;
   let token = null;
   try {
-    console.log(req.cookies.auth)
+    console.log(req.cookies.auth);
     token = req.cookies.auth;
-    console.log("sucess get cookie auth")
+    console.log("sucess get cookie auth");
   } catch (error) {
     console.log("cookies doesn't exist");
   }
@@ -187,7 +219,6 @@ app.get("/", (req, res) => {
   //console.log(session);
 
   //let token = window.localStorage.getItem("access-token");
-  
 
   if (token) {
     jwt.verify(
@@ -274,7 +305,7 @@ app.post("/login", (req, res) => {
       data: { token },
     });*/
 
-    res.cookie("auth", token, {maxAge: 10 * 60 * 60});
+    res.cookie("auth", token, { maxAge: 10 * 60 * 60 });
 
     res.redirect("/");
     /*res.json({
@@ -398,7 +429,6 @@ app.get("/productoRandom", async (req, res) => {
   res.send(producto);
 });
 
-
 app.delete("/deleteProducto/:id", async (req, res) => {
   let id = parseInt(req.params.id);
 
@@ -458,11 +488,16 @@ app.get("/getMongoData", async (req, res) => {
   res.json(chats);
 });
 
-//Start the server
-server.listen(process.env.PORT || PORT, function (err) {
-  if (err) console.log(err);
-  console.log("Server started at http://localhost:" + PORT);
-});
+if (cluster.isMaster) {
+  masterProcess();
+} else {
+  //Start the server
+  server.listen(process.env.PORT || PORT, function (err) {
+    if (err) console.log(err);
+    console.log("Server started at http://localhost:" + PORT);
+  });
+  //childProcess();
+}
 
 module.exports = {
   sql,
