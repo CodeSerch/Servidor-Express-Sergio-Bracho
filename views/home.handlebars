@@ -1,11 +1,7 @@
 <div class="padre"><h2>Vista: home</h2></div>
-<div class="padre">
-  <a href="/login">LOGIN</a>
-  <a href="/logout">LOGOUT</a>
-</div>
 
 <div class="padre">
-  <div class="form">
+  <div class="form col-5">
     <h3>Formulario para agregar Productos</h3>
     <form action="/productos" method="post">
       <label for="fname">Nombre del Producto</label>
@@ -17,20 +13,10 @@
       <label for="fname">Imagen Url</label>
       <input type="text" name="imgUrl" />
 
-      <input type="submit" />
+      <div class="col-3">
+        <button type="submit" class="btn btn-primary mb-2">submit</button>
+      </div>
 
     </form>
   </div>
-</div>
-<div class="padre">
-  <a href="/info">ver info del sistema</a>
-</div>
-<div class="padre">
-  <a href="/productos">ver productos</a>
-</div>
-<div class="padre">
-  <a href="/liveProducts">vista dinamica de productos</a>
-</div>
-<div class="padre">
-  <a href="/chat">Chat</a>
 </div>

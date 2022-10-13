@@ -1,4 +1,4 @@
-// ./node_modules/.bin/pm2 list  
+// ./node_modules/.bin/pm2 list
 
 //Archivo de seguridad con la data de la url de mi base de datos MongoDB
 require("dotenv").config();
@@ -12,8 +12,7 @@ let cookieParser = require("cookie-parser");
 const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
 
-console.log("numero de Cpus => " + numCPUs);
-console.log("PID MASTER => " + process.pid);
+//console.log("numero de Cpus => " + numCPUs);
 
 /*for (let i = 0; i < numCPUs; i++) {
   cluster.fork();
@@ -36,9 +35,13 @@ function masterProcess() {
 }
 
 function childProcess() {
-  console.log(`Worker ${process.pid} started and finished`);
+  console.log(`Worker ${process.pid} is running`);
 
   //process.exit();
+}
+
+if (!cluster.isMaster) {
+  childProcess();
 }
 
 let systemInfo = {
@@ -93,7 +96,7 @@ const sql = new ClienteSql(options);
 
 async function asynCall() {
   try {
-    console.log("trye");
+    //console.log("trye");
     let articulo = { nombre: "Pollo" };
     await sql.insertarArticulos(articulo);
   } catch (error) {
@@ -247,14 +250,14 @@ app.get("/", (req, res) => {
   //console.log(userData);
 
   if (token) {
-    res.render("home", { navbar: "navbaar", userData: userData.alias });
+    res.render("home", { userData: userData.alias });
   } else {
-    res.render("home", { navbar: "navbar" });
+    res.render("home");
   }
 });
 
 app.get("/login", (req, res) => {
-  res.render("login", { layout: "main", navbar: "navbar" });
+  res.render("login", { layout: "main" });
 });
 
 app.post("/login", (req, res) => {
@@ -494,12 +497,12 @@ app.get("/getMongoData", async (req, res) => {
 if (cluster.isMaster) {
   masterProcess();
 } else {
+  //childProcess();
   //Start the server
   server.listen(process.env.PORT || PORT, function (err) {
     if (err) console.log(err);
     console.log("Server started at http://localhost:" + PORT);
   });
-  //childProcess();
 }
 
 module.exports = {

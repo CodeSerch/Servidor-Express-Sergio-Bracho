@@ -4,7 +4,8 @@ body {
 
 div.padre {
   display: flex;
-  justify-content: center;
+  justify-content: left;
+  margin-left: 40px;
 }
 
 div.producto {
@@ -17,19 +18,20 @@ div.producto {
 }
 
 div.form {
-  background-color: #383838;
+  background-color: #383838d1;
   border: 1px solid rgb(116, 116, 116);
   color: white;
 
-  padding-right: 40px;
-  padding-left: 40px;
+  padding-right: 20px;
+  padding-left: 20px;
   padding-top: 10px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 
   margin: 20px;
 
   border-radius: 10px;
 }
+
 
 input {
   width: 100%;
@@ -48,28 +50,28 @@ input[type="submit"] {
 }
 
 a {
-    background-color: #51aee4;
+    background-color: #989fdd;
     border: none;
     color: white;
     padding: 16px 32px;
     text-decoration: none;
-    margin: 4px 2px;
+    margin: 4px 10px;
     cursor: pointer;
     border-radius: 10px;
 }
 /* unvisited link */
 a:link {
-  color: rgb(69, 54, 207);
+  color: rgb(0, 255, 149);
 }
 
 /* visited link */
 a:visited {
-  color: rgb(37, 79, 143);
+  color: rgb(30, 32, 36);
 }
 
 /* mouse over link */
 a:hover {
-  color: rgb(255, 255, 255);
+  color: rgb(32, 207, 123);
 }
 
 /* selected link */

@@ -120,7 +120,7 @@ class Carrito {
 class ContenedorCarritos {
     constructor() {
         this.arrayDeCarritos = new Array;
-        console.log("iniciando constructor");
+        //console.log("iniciando constructor");
     }
 
     getById(number) {
