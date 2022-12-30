@@ -9,7 +9,12 @@ mainSocket.on("send user", function (userData) {
   user = userData;
 
   let userItem = document.getElementById("username");
-  userItem.textContent = "Bienvido " + user[0].alias;
+  try {
+    userItem.textContent = "Bienvenido " + user[0].alias;
+  } catch (error) {
+    
+  }
+  
   console.log(user[0]);
 });
 

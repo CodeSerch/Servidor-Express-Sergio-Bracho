@@ -5,10 +5,14 @@ let avatarImg = "";
 
 socket.emit("get user", "Serch28");
 
-socket.on("send user", function (userData){
+socket.on("send user", function (userData) {
+  try {
     usuario = userData[0].alias;
     avatarImg = userData[0].avatar;
-})
+  } catch (error) {
+    console.log(" CHAT ERROR => " + error);
+  }
+});
 
 let messages = document.getElementById("messages");
 let form = document.getElementById("form");

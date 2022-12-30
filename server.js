@@ -54,10 +54,19 @@ let systemInfo = {
 };
 
 /*----------------Config de MongoDB------------------------*/
-const { model } = require("mongoose");
+/*const { model } = require("mongoose");
 require("./daos/MongoDB/config");
 
-var { Productos, ChatStorage, Users } = require("./daos/MongoDB/models");
+var { Productos, ChatStorage, Users } = require("./daos/MongoDB/models");*/
+
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://Sergio28:<password>@cluster0.jtavcgs.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
 
 /*---------------------------------------------------------*/
 
