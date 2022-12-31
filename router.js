@@ -132,25 +132,10 @@ router.post("/login", (req, res) => {
       }
     );
 
-    //window.localStorage.setItem("access_token", token);
-
-    //usuarioDB.token = token;
-
-    /*res.header("auth-token", token).json({
-        error: null,
-        data: { token },
-      });*/
-
     console.log("res.cookie");
     res.cookie("auth", token, { maxAge: 10 * 60 * 60 });
 
     res.redirect("/");
-    /*res.json({
-        ok: true,
-        usuario: usuarioDB,
-        token,
-      });*/
-    //RESPUESTA
   });
 });
 
@@ -351,7 +336,6 @@ router.delete("/carrito/:id/productos/:id_prod", async (req, res) => {
   res.json(carritoContainer.deleteProductById(id, id_prod));
 });
 
-//ROUTES WITH MONGODB
 router.get("/getMongoData", async (req, res) => {
   //Get Data MONGODB
   //const productsMDB = await productModel.find({})

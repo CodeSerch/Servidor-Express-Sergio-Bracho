@@ -1,5 +1,3 @@
-// ./node_modules/.bin/pm2 list
-
 //Archivo de seguridad con la data de la url de mi base de datos MongoDB
 require("dotenv").config();
 
@@ -17,12 +15,6 @@ const cookies = require("cookies");
 
 const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
-
-//console.log("numero de Cpus => " + numCPUs);
-
-/*for (let i = 0; i < numCPUs; i++) {
-  cluster.fork();
-}*/
 
 function masterProcess() {
   console.log(`Master ${process.pid} is running`);
@@ -96,8 +88,6 @@ const sql = new ClienteSql(options);
 /*---------------------------------------------------------*/
 
 //const { MDBoptions } = require('./options/MariaDB');
-
-//MYSQL
 
 async function asynCall() {
   try {
