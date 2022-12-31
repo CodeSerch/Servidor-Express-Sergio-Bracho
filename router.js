@@ -14,21 +14,28 @@ var { Productos, ChatStorage, Users } = require("./daos/MongoDB/models");
 const contenedor = require("./programa.js");
 const productContainer = new contenedor.Contenedor("./contenedor.txt");
 
-router.get("/", (req, res) => {
+function verifyToken(req, res, next) {
+  // Extraer el token del encabezado de la solicitud
+  const token = req.cookies.auth;
 
-  const verifyToken = (req, res, next) => {
-    const token = req.header("auth-token");
-    if (!token) return res.status(401).json({ error: "Acceso denegado" });
-    try {
-      const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-      req.user = verified;
-      console.log("token valido?");
-      next(); // continuamos
-    } catch (error) {
-      res.status(400).json({ error: "token no es válido" });
-    }
-  };
+  //seria mas seguro usar el header en vez de las cookies, pero por ahora por facilidad usare estas.
+  //const token = req.header("auth-token");
 
+  // Verificar que el token existe
+  if (!token) return res.status(401).json({ error: "Acceso denegado" });
+
+  // Verificar la firma del token
+  try {
+    const verified = jwt.verify(token, process.env.SEED_AUTENTICACION);
+    req.user = verified;
+    console.log("token valido?");
+    next(); // continuamos
+  } catch (error) {
+    res.status(400).json({ error: "token no es válido" });
+  }
+}
+
+function getTokenData(req, res) {
   let userData;
   let token = null;
   try {
@@ -39,11 +46,37 @@ router.get("/", (req, res) => {
     console.log("cookies doesn't exist");
   }
 
-  //let session = req.session;
+  if (token) {
+    jwt.verify(
+      token,
+      process.env.SEED_AUTENTICACION,
+      function (err, token_data) {
+        if (err) {
+          return res.status(403).send("Error");
+        } else {
+          req.user_data = token_data;
+          console.log(token_data);
+          let userData = token_data.usuario;
+          return userData;
+        }
+      }
+    );
+  } else {
+    console.log("no token");
+    //return res.status(403).send('No token');
+  }
+}
 
-  //console.log(session);
-
-  //let token = window.localStorage.getItem("access-token");
+router.get("/", verifyToken, (req, res) => {
+  let userData;
+  let token = null;
+  try {
+    console.log(req.cookies.auth);
+    token = req.cookies.auth;
+    console.log("sucess get cookie auth");
+  } catch (error) {
+    console.log("cookies doesn't exist");
+  }
 
   if (token) {
     jwt.verify(
@@ -56,6 +89,7 @@ router.get("/", (req, res) => {
           req.user_data = token_data;
           console.log(token_data);
           userData = token_data.usuario;
+          //return userData;
         }
       }
     );
@@ -63,11 +97,6 @@ router.get("/", (req, res) => {
     console.log("no token");
     //return res.status(403).send('No token');
   }
-
-  //let userData = req.user;
-
-  //console.log(userData);
-
   if (token) {
     res.render("home", { userData: userData.alias });
   } else {
