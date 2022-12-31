@@ -4,18 +4,33 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon /server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pm2": "pm2 start server.js -i max"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
+    "cluster": "^0.7.7",
+    "cookie-parser": "^1.4.6",
+    "cookies": "^0.8.0",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-handlebars": "^6.0.6",
+    "express-session": "^1.17.3",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^2.2.0",
+    "mongoose": "^6.5.2",
+    "mongoose-unique-validator": "^3.1.0",
     "nodemon": "^2.0.19",
+    "passport": "^0.6.0",
+    "pm2": "^5.2.0",
     "socket.io": "^4.5.1",
     "sqlite3": "^5.0.11"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@faker-js/faker": "^7.4.0"
+  }
 }

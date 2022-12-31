@@ -6,9 +6,8 @@
 <div class="padre">
   {{#each products}}
     <div class="producto">
-      <p>Titulo: {{title}}</p>
-      <p>Precio: {{price}}</p>
-      <p>ImgUrl: {{imgUrl}}</p>
+      <p>Titulo: {{name}}</p>
+      <p>Precio: {{precio}}</p>
       <br />
     </div>
   {{/each}}
@@ -21,4 +20,4 @@
     <button id="btn">refresh</button>
 
 <script src="../socket.io/socket.io.js"></script>
-    <script src="/javascript/vivo.js"></script>
+<script src="/javascript/vivo.js"></script>

@@ -1,15 +1,19 @@
-<div class="padre"><h2>Vista: Productos</h2></div>
+<div class="padre">
+  <h2>Vista: Productos</h2>
+</div>
+<div class="padre">
+  <p>productos obtenidos de la base de datos MongoDB</p>
+</div>
+
 {{{body}}}
 <div class="padre">
   {{#each products}}
     <div class="producto">
-      <p>Titulo: {{title}}</p>
-      <p>Precio: {{price}}</p>
-      <p>ImgUrl: {{imgUrl}}</p>
-      <br />
+      <p>Name: {{name}}</p>
+      <p>Price: {{price}}</p>
     </div>
   {{/each}}
 </div>
 <div class="padre">
-<a href="/">volver al inicio</a>
+  <a href="/">volver al inicio</a>
 </div>
