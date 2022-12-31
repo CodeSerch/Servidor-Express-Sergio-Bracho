@@ -181,10 +181,7 @@ router.post("/register", function (req, res) {
         err,
       });
     }
-    res.json({
-      ok: true,
-      usuario: usuarioDB,
-    });
+    res.redirect('/');
   });
 });
 
