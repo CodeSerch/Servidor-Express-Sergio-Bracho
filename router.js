@@ -92,7 +92,6 @@ router.get("/register", (req, res) => {
 
 router.post("/login", (req, res) => {
   let body = req.body;
-
   Users.findOne({ correo: body.correo }, (erro, usuarioDB) => {
     if (erro) {
       return res.status(500).json({
@@ -100,7 +99,6 @@ router.post("/login", (req, res) => {
         err: erro,
       });
     }
-
     // Verifica que exista un usuario con el mail escrita por el usuario.
     if (!usuarioDB) {
       return res.status(400).json({
