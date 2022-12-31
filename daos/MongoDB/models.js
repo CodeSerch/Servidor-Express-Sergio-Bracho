@@ -8,9 +8,14 @@ let rolesValidos = {
 };
 
 const productos = new Schema({
-  title: String, // String is shorthand for {type: String}
-  price: Number,
-  imgUrl: String,
+  name: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  }
 });
 
 const chat = new Schema({
