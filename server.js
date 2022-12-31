@@ -6,11 +6,14 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 let sessions = require("express-session");
+
+//Obtener las Cookies
 let cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 // Importa el router desde el archivo router.js
 const router = require("./router");
-
-//let cookies = require('cookies')
+const cookies = require("cookies");
 
 const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
@@ -46,7 +49,6 @@ function childProcess() {
 if (!cluster.isMaster) {
   childProcess();
 }
-
 
 /*----------------Config de MongoDB------------------------*/
 const { model } = require("mongoose");
@@ -85,7 +87,6 @@ async function createUser() {
 }
 
 //createUser();
-
 
 /*----------------Config de MYSql--------------------------*/
 const { ClienteSql, ClienteMDB } = require("./sql.js");
@@ -140,7 +141,7 @@ let bool,
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/', router);
+app.use("/", router);
 
 app.use(express.static(__dirname + "/public"));
 
@@ -148,8 +149,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Calling the express.json() method for parsing
 app.use(express.json());
-
-app.use(cookieParser());
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(
@@ -195,13 +194,14 @@ io.on("connection", (socket) => {
   });
 });
 
-
-app.engine('handlebars', engine({
-  allowProtoPropertiesByDefault: true
-}));
-app.set('view engine', 'handlebars');
+app.engine(
+  "handlebars",
+  engine({
+    allowProtoPropertiesByDefault: true,
+  })
+);
+app.set("view engine", "handlebars");
 app.set("views", "./views");
-
 
 if (cluster.isMaster) {
   masterProcess();
@@ -215,5 +215,5 @@ if (cluster.isMaster) {
 }
 
 module.exports = {
-  sql
+  sql,
 };

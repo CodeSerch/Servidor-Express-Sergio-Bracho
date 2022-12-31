@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { systemInfo } = require("./systemInfo");
+const cookies = require("cookies");
 
 //Sistema de usuarios y autenticacion:
 const bcrypt = require("bcrypt");
@@ -14,6 +15,7 @@ const contenedor = require("./programa.js");
 const productContainer = new contenedor.Contenedor("./contenedor.txt");
 
 router.get("/", (req, res) => {
+
   const verifyToken = (req, res, next) => {
     const token = req.header("auth-token");
     if (!token) return res.status(401).json({ error: "Acceso denegado" });
@@ -132,6 +134,7 @@ router.post("/login", (req, res) => {
         data: { token },
       });*/
 
+    console.log("res.cookie");
     res.cookie("auth", token, { maxAge: 10 * 60 * 60 });
 
     res.redirect("/");
@@ -194,7 +197,7 @@ router.get("/productos", async (req, res) => {
     };
   });
 
-  res.render("productos", {layout: "main", products: normalObjects });
+  res.render("productos", { layout: "main", products: normalObjects });
 });
 
 router.get("/liveProducts", async function (req, res) {
