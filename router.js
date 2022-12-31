@@ -22,7 +22,11 @@ function verifyToken(req, res, next) {
   //const token = req.header("auth-token");
 
   // Verificar que el token existe
-  if (!token) return res.status(401).json({ error: "Acceso denegado" });
+  if (!token) {
+    console.log("Acceso denegado, tienes que iniciar sesion");
+    return res.redirect("/login");
+    //res.status(401).json({ error: "Acceso denegado" });
+  }
 
   // Verificar la firma del token
   try {
@@ -35,12 +39,11 @@ function verifyToken(req, res, next) {
   }
 }
 
-function getTokenData(req, res) {
+function getTokenData(token) {
   let userData;
-  let token = null;
+
   try {
-    console.log(req.cookies.auth);
-    token = req.cookies.auth;
+    console.log(token);
     console.log("sucess get cookie auth");
   } catch (error) {
     console.log("cookies doesn't exist");
@@ -54,10 +57,8 @@ function getTokenData(req, res) {
         if (err) {
           return res.status(403).send("Error");
         } else {
-          req.user_data = token_data;
           console.log(token_data);
-          let userData = token_data.usuario;
-          return userData;
+          userData = token_data.usuario;
         }
       }
     );
@@ -65,38 +66,15 @@ function getTokenData(req, res) {
     console.log("no token");
     //return res.status(403).send('No token');
   }
+
+  return userData;
 }
 
 router.get("/", verifyToken, (req, res) => {
+  let token = req.cookies.auth;
   let userData;
-  let token = null;
-  try {
-    console.log(req.cookies.auth);
-    token = req.cookies.auth;
-    console.log("sucess get cookie auth");
-  } catch (error) {
-    console.log("cookies doesn't exist");
-  }
+  userData = getTokenData(token);
 
-  if (token) {
-    jwt.verify(
-      token,
-      process.env.SEED_AUTENTICACION,
-      function (err, token_data) {
-        if (err) {
-          return res.status(403).send("Error");
-        } else {
-          req.user_data = token_data;
-          console.log(token_data);
-          userData = token_data.usuario;
-          //return userData;
-        }
-      }
-    );
-  } else {
-    console.log("no token");
-    //return res.status(403).send('No token');
-  }
   if (token) {
     res.render("home", { userData: userData.alias });
   } else {
@@ -210,11 +188,27 @@ router.post("/register", function (req, res) {
   });
 });
 
-router.get("/info", (req, res) => {
-  res.render("info", { layout: "main", info: systemInfo });
+router.get("/info", verifyToken, (req, res) => {
+  let token = req.cookies.auth;
+  let userData;
+  userData = getTokenData(token);
+
+  if (token) {
+    res.render("info", {
+      layout: "main",
+      info: systemInfo,
+      userData: userData.alias,
+    });
+  } else {
+    res.render("info", { layout: "main", info: systemInfo });
+  }
 });
 
-router.get("/productos", async (req, res) => {
+router.get("/productos", verifyToken, async (req, res) => {
+  let token = req.cookies.auth;
+  let userData;
+  userData = getTokenData(token);
+
   console.log("obteniendo productos...");
   const productos = await Productos.find({});
 
@@ -226,7 +220,15 @@ router.get("/productos", async (req, res) => {
     };
   });
 
-  res.render("productos", { layout: "main", products: normalObjects });
+  if (token) {
+    res.render("productos", {
+      layout: "main",
+      products: normalObjects,
+      userData: userData.alias,
+    });
+  } else {
+    res.render("productos", { layout: "main", products: normalObjects });
+  }
 });
 
 router.get("/liveProducts", async function (req, res) {
@@ -237,8 +239,20 @@ router.get("/liveProducts", async function (req, res) {
   res.render("liveProducts", { layout: "main", products: productos });
 });
 
-router.get("/chat", (req, res) => {
-  res.render("chat", { layout: "main", title: "chat" });
+router.get("/chat", verifyToken, (req, res) => {
+  let token = req.cookies.auth;
+  let userData;
+  userData = getTokenData(token);
+
+  if (token) {
+    res.render("chat", {
+      layout: "main",
+      title: "chat",
+      userData: userData.alias,
+    });
+  } else {
+    res.render("chat", { layout: "main", title: "chat" });
+  }
 });
 
 router.get("/productos/:id", async (req, res) => {
