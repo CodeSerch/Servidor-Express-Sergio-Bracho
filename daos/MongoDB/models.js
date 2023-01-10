@@ -1,13 +1,19 @@
+const config = require("./config");
 const { Schema, model } = require("mongoose");
 let uniqueValidator = require("mongoose-unique-validator");
 //const { rolesValidos } = require("../../server");
+
+const db = config.getConnection();
+db.on('error', console.error.bind(console, 'connection error:'));
+const myDb = db.useDb('ecommerce');
+//const myDb = db.client.db("ecommerce");
 
 let rolesValidos = {
   values: ["ADMIN", "USER"],
   message: "{VALUE} no es un role válido",
 };
 
-const productos = new Schema({
+const products = new Schema({
   name: {
     type: String,
     required: true
@@ -65,14 +71,15 @@ users.plugin(uniqueValidator, {
   message: "{PATH} debe de ser único",
 });
 
-const chatSchema = model("chatStorage", chat);
-const productosSchema = model("productos", productos);
-const usersSchema = model("users", users);
+
+const chatSchema = myDb.model("chatStorage", chat);
+const productsSchema = myDb.model("products", products);
+const usersSchema = myDb.model("users", users);
 
 //module.exports = model("productos", productSchema)
 //module.exports = model("chatStorage", chatSchema)
 module.exports = {
   ChatStorage: chatSchema,
-  Productos: productosSchema,
+  Products: productsSchema,
   Users: usersSchema,
 };

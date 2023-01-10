@@ -10,7 +10,7 @@ let cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
 // Importa el router desde el archivo router.js
-const router = require("./router");
+const router = require("./routes/router");
 const cookies = require("cookies");
 
 const cluster = require("cluster");
