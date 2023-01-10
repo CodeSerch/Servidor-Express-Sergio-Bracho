@@ -11,7 +11,7 @@ process.env.CADUCIDAD_TOKEN = '48h';
 //SEED de autenticacion
 process.env.SEED_AUTENTICACION = process.env.SEED_AUTENTICACION || 'este-es-el-seed-desarrollo';
 
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1})
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(db => console.log("MongoDB is connected"))
 .catch(err => console.log("database connect error"));
 
@@ -22,3 +22,8 @@ function getConnection(){
 
 //Bind connection to error event (to get notification of connection errors)
 //db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+module.exports = {
+    getConnection: getConnection
+  };
+  

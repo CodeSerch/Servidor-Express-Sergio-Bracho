@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { systemInfo } = require("./systemInfo");
+const { systemInfo } = require("../systemInfo");
 const cookies = require("cookies");
 
 //Sistema de usuarios y autenticacion:
@@ -9,9 +9,9 @@ const jwt = require("jsonwebtoken");
 
 var uniqueValidator = require("mongoose-unique-validator");
 
-var { Productos, ChatStorage, Users } = require("./daos/MongoDB/models");
+var { Products, ChatStorage, Users } = require("../daos/MongoDB/models");
 
-const contenedor = require("./programa.js");
+const contenedor = require("../programa.js");
 const productContainer = new contenedor.Contenedor("./contenedor.txt");
 
 function verifyToken(req, res, next) {
@@ -157,7 +157,7 @@ router.post("/register", function (req, res) {
     role,
   });
 
-  usuario.save((err, usuarioDB) => {
+  usuario.save((err) => {
     if (err) {
       return res.status(400).json({
         ok: false,
