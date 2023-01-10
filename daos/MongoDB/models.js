@@ -7,7 +7,7 @@ let rolesValidos = {
   message: "{VALUE} no es un role válido",
 };
 
-const productos = new Schema({
+const products = new Schema({
   name: {
     type: String,
     required: true
@@ -66,13 +66,13 @@ users.plugin(uniqueValidator, {
 });
 
 const chatSchema = model("chatStorage", chat);
-const productosSchema = model("productos", productos);
+const productsSchema = model("products", products);
 const usersSchema = model("users", users);
 
 //module.exports = model("productos", productSchema)
 //module.exports = model("chatStorage", chatSchema)
 module.exports = {
   ChatStorage: chatSchema,
-  Productos: productosSchema,
+  Products: productsSchema,
   Users: usersSchema,
 };
