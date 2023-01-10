@@ -13,7 +13,7 @@ app.use(cookieParser());
 const router = require("./routes/router");
 const cookies = require("cookies");
 
-const cluster = require("cluster");
+/*const cluster = require("cluster");
 const numCPUs = require("os").cpus().length;
 
 function masterProcess() {
@@ -40,7 +40,7 @@ function childProcess() {
 
 if (!cluster.isMaster) {
   childProcess();
-}
+}*/
 
 /*----------------Config de MongoDB------------------------*/
 const { model } = require("mongoose");
@@ -193,16 +193,17 @@ app.engine(
 app.set("view engine", "handlebars");
 app.set("views", "./views");
 
+/*
 if (cluster.isMaster) {
   masterProcess();
 } else {
   //childProcess();
-  //Start the server
-  server.listen(process.env.PORT || PORT, function (err) {
-    if (err) console.log(err);
-    //console.log("Server started at http://localhost:" + PORT);
-  });
-}
+  //Start the server*/
+server.listen(process.env.PORT || PORT, function (err) {
+  if (err) console.log(err);
+  console.log("Server started at http://localhost:" + PORT);
+});
+//}
 
 module.exports = {
   sql,
